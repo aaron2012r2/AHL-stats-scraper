@@ -12,9 +12,10 @@ url_dailyreport <- "http://admin.leaguestat.com/download.php?client_code=ahl&fil
 # Default value 87 will retrieve Texas Stars skater stats
 fnAhlTable <- function(tablenum = 87) {
   xpathnum = paste('/html/body/table[',as.character(tablenum),']', sep = "")
-  return_list <- url %>%
+  return_list <- url_dailyreport %>%
     read_html() %>%
     html_nodes(xpath = xpathnum) %>%
     html_table()
+  return_list
 }
 
