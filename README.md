@@ -16,6 +16,12 @@ install.packages("rvest")
 ```
 
 ## Example
+View all teams and the index of their table
+```
+> ListTeams()
+```
+
+
 Download Texas Stars skater data, then see Tanner Kero's stats
 ```
 > txSkaters <- fnAhlTable(87)
