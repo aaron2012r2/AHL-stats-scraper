@@ -11,13 +11,29 @@ url_dailyreport <- "http://admin.leaguestat.com/download.php?client_code=ahl&fil
 # Function for retrieving specific table by number from xpath
 # Input param tablenum: the number of the table from the xpath
 # Default value 87 will retrieve Texas Stars skater stats
-fnAhlTable <- function(tablenum = 87) {
+fnAhlTable <- function(tablenum = 87, cleanSkaters = TRUE) {
   xpathnum = paste('/html/body/table[',as.character(tablenum),']', sep = "")
   table_return <- url_dailyreport %>%
     read_html() %>%
     html_nodes(xpath = xpathnum) %>%
     html_table()
-  table_return[[1]]
+  df_Table <- table_return[[1]]
+  
+  if (cleanSkaters == TRUE) {
+  # Consolidate multiple teams onto only total line
+  df_Table <- df_Table %>%
+    filter(No. != "NA") %>%
+    # Remove goalies and total
+    filter(POS != "G")
+  # Add designation for Rookie
+  df_Table$Rookie <- str_detect(df_Table$PLAYER, "\\*")
+  # Add designation for Active
+  df_Table$Active <- !str_detect(df_Table$PLAYER, "^(x )|^(\\*x )")
+  # Clean names
+  df_Table$PLAYER <- str_replace_all(df_Table$PLAYER, "^(x )|^(\\*x )|^\\* |\\(total\\)$", "")
+  } else {}
+  df_Table
+  
 }
 
 ListTables <- function() {
