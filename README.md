@@ -9,23 +9,24 @@ Upcoming features: Remove hard-coded references, clean and consolidate tables th
 Running this R script will load the required packages and create a set of functions for scraping the AHL daily reports page. There is no barrier to entry, provided you have all prerequisites installed.
 
 ### Prerequisites
-You should have tidyverse and rvest installed
+You should have tidyverse, rvest, and stringr installed
 ```
 install.packages("tidyverse")
 install.packages("rvest")
+install.packages("stringr")
 ```
 
 ## Example
 View all teams and the index of their table
 ```
-> ListTeams()
+> ListTables()
 ```
 
 
 Download Texas Stars skater data, then see Tanner Kero's stats
 ```
 > txSkaters <- fnAhlTable(87)
-> txSkaters[[1]][txSkaters[[1]]$PLAYER == "Tanner Kero",]
+> txSkaters[txSkaters$PLAYER == "Tanner Kero",]
 
   No.      PLAYER POS GP G  A PTS +/- PIM PP PPA SHG SHA GW FG IG OT UA EN SOG SOA SGW  SO% SH  SH%
 4  20 Tanner Kero   C 34 7 19  26  -9  16  2   8   0   0  0  2  1  0  1  1   2   7   2 28.6 68 10.3
