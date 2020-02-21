@@ -36,6 +36,10 @@ fnAhlTable <- function(tablenum = 87, cleanSkaters = TRUE) {
   
 }
 
+
+
+# ListTables: none
+
 ListTables <- function() {
   all_h2 <- url_dailyreport %>% 
     read_html() %>% 
@@ -46,5 +50,30 @@ ListTables <- function() {
   skater_tables <- seq(35,95,2)
   goalie_tables <- seq(36,96,2)
   dfTeams <- data.frame("Teams" = all_teams, "Skater Table" = skater_tables, "Goalie Table" = goalie_tables)
-  print(dfTeams)
+  dfTeams
 }
+
+
+
+# fnAllTeams: cleanSkaters
+
+fnAllTeams <- function(cleanSkaters = TRUE){
+  
+  alltables <- ListTables()
+  
+  # Seed first set in data frame for all teams
+  dfAllTeams <- fnAhlTable(alltables[1,2], cleanSkaters = cleanSkaters)
+  dfAllTeams$TEAM <- rep(as.character(alltables[1,]$Teams),nrow(dfAllTeams))
+  
+  # Populate with remaining teams
+  for (team in 2:nrow(alltables)) {
+    tempRow <- alltables[team,]
+    tempTeam <- fnAhlTable(tempRow[2], cleanSkaters = cleanSkaters)
+    tempTeam$TEAM <- rep(as.character(tempRow$Teams),nrow(tempTeam))
+    dfAllTeams <- rbind(dfAllTeams, tempTeam)
+  }
+  
+  # Return the full data frame
+  dfAllTeams
+  
+  }
